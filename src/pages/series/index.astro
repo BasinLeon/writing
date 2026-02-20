@@ -6,7 +6,8 @@ const literary = await getCollection('literary', ({ data }) => !data.isDraft);
 const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 const seriesCounts = literary.reduce((acc, entry) => {
-  const series = entry.data.series?.trim() || 'Unsorted';
+  const series = entry.data.series?.trim();
+  if (!series) return acc;
   acc.set(series, (acc.get(series) ?? 0) + 1);
   return acc;
 }, new Map<string, number>());
@@ -22,13 +23,17 @@ const base = import.meta.env.BASE_URL;
   <section class="latest">
     <p class="kicker">Catalog</p>
     <h1>Series</h1>
-    <ol class="writing-list">
-      {seriesList.map((item) => (
-        <li>
-          <a class="writing-title" href={`${base}series/${item.slug}/`}>{item.name}</a>
-          <p class="writing-meta">{item.count} piece{item.count === 1 ? '' : 's'} • series</p>
-        </li>
-      ))}
-    </ol>
+    {seriesList.length > 0 ? (
+      <ol class="writing-list">
+        {seriesList.map((item) => (
+          <li>
+            <a class="writing-title" href={`${base}series/${item.slug}/`}>{item.name}</a>
+            <p class="writing-meta">{item.count} piece{item.count === 1 ? '' : 's'} • series</p>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="lede">No series published yet. Add `series:` in literary frontmatter to start a volume.</p>
+    )}
   </section>
 </Layout>

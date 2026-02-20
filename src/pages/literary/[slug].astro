@@ -13,6 +13,13 @@ const base = import.meta.env.BASE_URL;
 const words = entry.body.trim().split(/\s+/).filter(Boolean).length;
 const readMinutes = Math.max(1, Math.round(words / 220));
 const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const seriesName = entry.data.series?.trim() ?? '';
+const allPublished = await getCollection('literary', ({ data }) => data.isDraft !== true);
+const seriesEntries = seriesName
+  ? allPublished
+      .filter((post) => (post.data.series?.trim() ?? '') === seriesName)
+      .sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf())
+  : [];
 ---
 
 <Layout
@@ -44,6 +51,23 @@ const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+
           <a href={`${base}tags/${toSlug(tag)}/`}>#{tag}</a>
         ))}
       </div>
+      {seriesEntries.length > 1 && (
+        <nav class="series-local-toc" aria-label={`${seriesName} table of contents`}>
+          <p class="series-local-title">{seriesName}</p>
+          <ol>
+            {seriesEntries.map((post, index) => (
+              <li>
+                <span class="series-part">Part {index + 1}</span>
+                {post.slug === entry.slug ? (
+                  <span class="series-current">{post.data.title}</span>
+                ) : (
+                  <a href={`${base}literary/${post.slug}/`}>{post.data.title}</a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
     </header>
 
     <div class="prose-content">
@@ -128,6 +152,61 @@ const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+
     opacity: 1;
   }
 
+  .series-local-toc {
+    margin: 1.5rem auto 0;
+    max-width: 44ch;
+    border-top: 1px solid rgba(224, 185, 115, 0.28);
+    padding-top: 1rem;
+    text-align: left;
+  }
+
+  .series-local-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.78em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--light-soft-gold);
+  }
+
+  .series-local-toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .series-local-toc li {
+    display: grid;
+    grid-template-columns: 66px 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: 0.76em;
+  }
+
+  .series-part {
+    opacity: 0.52;
+    font-family: var(--font-display);
+  }
+
+  .series-local-toc a {
+    color: var(--warm-ivory);
+    text-decoration: underline;
+    text-decoration-color: rgba(224, 185, 115, 0.45);
+    text-underline-offset: 0.14em;
+    opacity: 0.82;
+  }
+
+  .series-local-toc a:hover {
+    opacity: 1;
+    color: var(--light-soft-gold);
+  }
+
+  .series-current {
+    color: var(--light-soft-gold);
+    opacity: 0.94;
+  }
+
   .prose-content p {
     margin-bottom: 1.75em;
     text-wrap: pretty;
@@ -170,6 +249,11 @@ const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+
     .prose-header {
       margin-top: 6vh;
       margin-bottom: 2.5rem;
+    }
+
+    .series-local-toc li {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
     }
   }
 </style>
