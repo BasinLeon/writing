@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const essays = (await getCollection('essays', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0));
+---
+
+<BaseLayout title="Leon Basin Literary" description="Literary digital writing for the modern era.">
+  <section class="hero">
+    <p class="kicker">Literary Digital Writer</p>
+    <h1>Writing for the Digital Era, Without Losing the Human Pulse</h1>
+    <p class="prose">Personal essays, memory fragments, and voice-led writing. This is a living archive for interior life, modern attention, and language that refuses to flatten into content.</p>
+    <div class="cta">
+      <a class="primary" href="/writing/manifesto/">Read the Manifesto</a>
+      <a href="/writing/literary-lane/">Enter Literary Lane</a>
+      <a href="/writing/literary-ideas/">Browse Literary Ideas</a>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:1rem;">
+    <article class="card">
+      <p class="kicker">Library</p>
+      <h2>Essays</h2>
+      <ul>
+        {essays.map((entry) => (
+          <li><a href={`/writing/${entry.slug}/`}>{entry.data.title}</a></li>
+        ))}
+      </ul>
+    </article>
+  </section>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays', ({ data }) => !data.draft);
+  return essays.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const all = (await getCollection('essays', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0));
+const currentIndex = all.findIndex((x) => x.slug === entry.slug);
+const next = currentIndex > -1 ? all[currentIndex + 1] : undefined;
+const prev = currentIndex > 0 ? all[currentIndex - 1] : undefined;
+---
+
+<BaseLayout title={`${entry.data.title} | Leon Basin Literary`} description={entry.data.description ?? ''} readingMode={true}>
+  <article class="essay-layout">
+    <header class="essay-head">
+      <p class="kicker">{entry.data.series ?? 'Essay'}</p>
+      <h1>{entry.data.title}</h1>
+      <p class="essay-meta">{entry.data.date?.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+    </header>
+
+    <div class="essay-grid">
+      <aside class="toc">
+        <p>On This Page</p>
+        <nav>
+          {headings
+            .filter((h) => h.depth === 2 || h.depth === 3)
+            .map((h) => (
+              <a href={`#${h.slug}`} style={h.depth === 3 ? 'padding-left: 0.65rem;' : ''}>{h.text}</a>
+            ))}
+        </nav>
+      </aside>
+
+      <section class="essay-content prose">
+        <Content />
+      </section>
+    </div>
+
+    <footer class="endmatter">
+      <h2>Continue Reading</h2>
+      <div class="cta">
+        <a href="/writing/">Back to Library</a>
+        {prev && <a href={`/writing/${prev.slug}/`}>Previous: {prev.data.title}</a>}
+        {next && <a href={`/writing/${next.slug}/`}>Next: {next.data.title}</a>}
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
