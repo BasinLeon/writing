@@ -1,10 +1,11 @@
 ---
-layout: page
+layout: essay
 title: Manifesto
 permalink: /manifesto/
+series: Foundational Text
+pretitle: Version 1 • Digital Era Journal
+date: 2026-02-20
 ---
-
-# Manifesto
 
 I write as a literary digital writer of the digital era.
 

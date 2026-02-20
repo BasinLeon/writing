@@ -1,0 +1,56 @@
+---
+layout: default
+---
+<article class="essay-layout">
+  <header class="essay-head">
+    <p class="eyebrow">{{ page.series | default: "Essay" }}</p>
+    <h1>{{ page.title }}</h1>
+    <p class="essay-meta">{{ page.pretitle | default: "Literary Journal" }}{% if page.date %} • {{ page.date | date: "%B %-d, %Y" }}{% endif %}</p>
+  </header>
+
+  <div class="essay-grid">
+    <aside class="essay-toc" id="essay-toc-wrap">
+      <p class="toc-title">On this page</p>
+      <nav id="essay-toc"></nav>
+    </aside>
+    <section class="essay-content" id="essay-content">
+      {{ content }}
+    </section>
+  </div>
+
+  <footer class="essay-endmatter">
+    <h2>Continue Reading</h2>
+    <div class="endmatter-links">
+      <a href="{{ '/literary/' | relative_url }}">Literary Lane</a>
+      <a href="{{ '/literary-ideas/' | relative_url }}">Literary Ideas</a>
+      <a href="{{ '/' | relative_url }}">Back to Home</a>
+    </div>
+  </footer>
+</article>
+
+<script>
+  (function () {
+    const root = document.getElementById("essay-content");
+    const nav = document.getElementById("essay-toc");
+    const wrap = document.getElementById("essay-toc-wrap");
+    if (!root || !nav || !wrap) return;
+
+    const headings = root.querySelectorAll("h2, h3");
+    if (!headings.length) {
+      wrap.style.display = "none";
+      return;
+    }
+
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = "section-" + (index + 1);
+      }
+
+      const link = document.createElement("a");
+      link.href = "#" + heading.id;
+      link.textContent = heading.textContent;
+      link.className = heading.tagName.toLowerCase() === "h3" ? "toc-sub" : "";
+      nav.appendChild(link);
+    });
+  })();
+</script>

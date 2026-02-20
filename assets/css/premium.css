@@ -312,6 +312,115 @@ a {
   margin-top: 0.25rem;
 }
 
+.essay-layout {
+  max-width: 100%;
+}
+
+.essay-head {
+  margin-bottom: 1rem;
+  padding: 1.2rem 1.2rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.88);
+}
+
+.essay-meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+}
+
+.essay-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 210px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.essay-toc {
+  position: sticky;
+  top: 105px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.9);
+  padding: 0.9rem 0.8rem;
+}
+
+.toc-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+#essay-toc {
+  display: grid;
+  gap: 0.24rem;
+}
+
+#essay-toc a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.25;
+  font-size: 0.88rem;
+}
+
+#essay-toc a:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+#essay-toc a.toc-sub {
+  padding-left: 0.7rem;
+  font-size: 0.82rem;
+}
+
+.essay-content {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.88);
+  padding: 1.3rem clamp(1rem, 3vw, 2rem) 1.6rem;
+}
+
+.essay-content p,
+.essay-content li {
+  max-width: 72ch;
+  font-size: 1.08rem;
+  line-height: 1.72;
+}
+
+.essay-content h2,
+.essay-content h3 {
+  max-width: 25ch;
+  margin-top: 1.5rem;
+}
+
+.essay-endmatter {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.9);
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.endmatter-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.endmatter-links a {
+  border: 1px solid rgba(26, 22, 19, 0.24);
+  border-radius: 999px;
+  padding: 0.44rem 0.82rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+
 ol,
 ul {
   padding-left: 1.2rem;
@@ -364,6 +473,14 @@ ul {
   .hero-grid,
   .start-grid {
     grid-template-columns: 1fr;
+  }
+
+  .essay-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .essay-toc {
+    position: static;
   }
 }
 
