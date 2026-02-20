@@ -1,5 +1,5 @@
-title: "Leon Basin Literary"
-description: "Personal essays, memory fragments, and voice-led writing."
+title: "Leon Basin | Literary Digital Writer"
+description: "Literary work for the digital era: personal essays, memory fragments, and voice-led writing."
 theme: minima
 markdown: kramdown
 timezone: America/Los_Angeles
@@ -14,6 +14,7 @@ author:
   email: lbasin23@gmail.com
 
 header_pages:
+  - manifesto.md
   - literary.md
   - literary-ideas.md
 

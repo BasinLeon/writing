@@ -71,11 +71,21 @@ p, li {
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(251, 248, 242, 0.95), rgba(244, 241, 234, 0.9));
   box-shadow: 0 16px 40px rgba(31, 25, 20, 0.08);
+  animation: rise-in 700ms ease-out both;
 }
 
 .hero p {
   color: var(--muted);
   max-width: 68ch;
+}
+
+.kicker {
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .hero-links {
@@ -111,6 +121,7 @@ p, li {
   border-radius: 14px;
   border: 1px solid var(--line);
   background: var(--card);
+  animation: rise-in 700ms ease-out both;
 }
 
 .section-card ul,
@@ -122,4 +133,15 @@ p, li {
 .site-footer {
   border-top: 1px solid var(--line);
   background: rgba(251, 248, 242, 0.85);
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
