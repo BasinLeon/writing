@@ -2,8 +2,6 @@
 title: "Literary Ideas"
 lastEdited: 2026-02-20
 status: mature
-description: "Starter prompts for essays, fragments, and memory-driven prose."
-tags: ["prompts", "ideas"]
 ---
 
 - A room I no longer live in, but still remember by sound.

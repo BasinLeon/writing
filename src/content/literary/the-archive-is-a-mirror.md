@@ -4,9 +4,6 @@ publishDate: 2026-01-29
 isDraft: false
 type: memory
 description: "A memory note on why archives reveal the writer as much as the work."
-series: "Memory Notes"
-tags: ["memory", "archive"]
-readingMode: true
 ---
 
 An archive is not neutral.

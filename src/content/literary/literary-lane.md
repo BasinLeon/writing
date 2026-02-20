@@ -4,9 +4,6 @@ publishDate: 2026-02-20
 isDraft: false
 type: essay
 description: "The personal side of my writing: memory fragments, city sketches, and voice-led essays."
-series: "Literary Lane"
-tags: ["personal", "essays"]
-readingMode: true
 ---
 
 This is the personal side of my writing.

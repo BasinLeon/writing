@@ -1,28 +1,26 @@
-import { defineCollection, z } from 'astro:content';
+import { z, defineCollection } from 'astro:content';
 
-const literary = defineCollection({
+const literaryCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     publishDate: z.date(),
-    isDraft: z.boolean().default(false),
+    description: z.string().max(160, 'Description must be under 160 characters.'),
     type: z.enum(['essay', 'fragment', 'memory']),
-    description: z.string().max(160),
-    series: z.string().default('Literary Lane'),
-    tags: z.array(z.string()).default([]),
-    readingMode: z.boolean().default(true)
-  })
+    isDraft: z.boolean().default(true)
+  }).strict()
 });
 
-const ideas = defineCollection({
+const ideasCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     lastEdited: z.date(),
-    status: z.enum(['seed', 'incubating', 'mature']),
-    description: z.string().max(160),
-    tags: z.array(z.string()).default([])
-  })
+    status: z.enum(['seed', 'incubating', 'mature'])
+  }).strict()
 });
 
-export const collections = { literary, ideas };
+export const collections = {
+  literary: literaryCollection,
+  ideas: ideasCollection
+};

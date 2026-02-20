@@ -4,6 +4,11 @@ import { getCollection } from 'astro:content';
 
 const ideas = (await getCollection('ideas'))
   .sort((a, b) => b.data.lastEdited.valueOf() - a.data.lastEdited.valueOf());
+
+const excerpt = (text: string, count = 20) => {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  return words.slice(0, count).join(' ') + (words.length > count ? '...' : '');
+};
 ---
 
 <Layout title="Literary Ideas | Leon Basin Literary" description="Living digital garden of seeds, incubating notes, and mature concepts.">
@@ -19,7 +24,7 @@ const ideas = (await getCollection('ideas'))
             {' • '}
             {idea.data.status}
           </p>
-          <p class="lede">{idea.data.description}</p>
+          <p class="lede">{excerpt(idea.body)}</p>
         </li>
       ))}
     </ol>
