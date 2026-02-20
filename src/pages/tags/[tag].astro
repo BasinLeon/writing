@@ -2,11 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-
 export async function getStaticPaths() {
   const literary = await getCollection('literary', ({ data }) => !data.isDraft);
   const groups = new Map<string, typeof literary>();
+  const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
   for (const entry of literary) {
     for (const tag of entry.data.tags ?? []) {
@@ -19,7 +18,7 @@ export async function getStaticPaths() {
   }
 
   return Array.from(groups.entries()).map(([tagName, entries]) => ({
-    params: { tag: toSlug(tagName) },
+    params: { tag: slugify(tagName) },
     props: {
       tagName,
       entries: entries.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
