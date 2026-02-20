@@ -1,6 +1,5 @@
-title: "Leon Basin | Literary Digital Writer"
-description: "Literary work for the digital era: personal essays, memory fragments, and voice-led writing."
-theme: minima
+title: "Leon Basin Literary"
+description: "Literary digital writing for the modern era: essays, memory fragments, and voice-led prose."
 markdown: kramdown
 timezone: America/Los_Angeles
 lang: en-US
@@ -8,14 +7,5 @@ lang: en-US
 # Project Pages URL for repo: BasinLeon/writing
 url: "https://basinleon.github.io"
 baseurl: "/writing"
-
-author:
-  name: Leon Basin
-  email: lbasin23@gmail.com
-
-header_pages:
-  - manifesto.md
-  - literary.md
-  - literary-ideas.md
 
 show_excerpts: true
