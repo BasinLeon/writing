@@ -2,31 +2,185 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const ideas = (await getCollection('ideas'))
-  .sort((a, b) => b.data.lastEdited.valueOf() - a.data.lastEdited.valueOf());
-
-const excerpt = (text: string, count = 20) => {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.slice(0, count).join(' ') + (words.length > count ? '...' : '');
-};
+const allIdeas = await getCollection('ideas');
+const sortedIdeas = allIdeas.sort((a, b) => b.data.lastEdited.valueOf() - a.data.lastEdited.valueOf());
+const base = import.meta.env.BASE_URL;
 ---
 
-<Layout title="Literary Ideas | Leon Basin Literary" description="Living digital garden of seeds, incubating notes, and mature concepts.">
-  <section class="latest">
-    <p class="kicker">Digital Garden</p>
-    <h1>Literary Ideas</h1>
-    <ol class="writing-list">
-      {ideas.map((idea) => (
-        <li>
-          <p class="writing-title">{idea.data.title}</p>
-          <p class="writing-meta">
-            {idea.data.lastEdited.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            {' • '}
-            {idea.data.status}
-          </p>
-          <p class="lede">{excerpt(idea.body)}</p>
-        </li>
-      ))}
-    </ol>
+<Layout title="Ideas Directory | Leon Basin" description="Raw articles, active drafts, and evolving logic models.">
+  <header class="terminal-header">
+    <nav class="reader-nav">
+      <a href={base}>← Return to Index</a>
+    </nav>
+    <h1 class="dir-title">/ideas</h1>
+    <p class="dir-meta">
+      Raw articles, blog posts, and active logic models.
+      <br />
+      Status: <span>Live Working Directory</span>
+    </p>
+  </header>
+
+  <section class="brutalist-container">
+    <table class="idea-ledger">
+      <thead>
+        <tr>
+          <th class="col-status">State</th>
+          <th class="col-title">Artifact</th>
+          <th class="col-date">Last Modified</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedIdeas.map((idea) => (
+          <tr>
+            <td class="col-status">
+              <span class={`status-badge ${idea.data.status}`}>[{idea.data.status}]</span>
+            </td>
+            <td class="col-title">
+              <a href={`${base}ideas/${idea.slug}/`} class="artifact-link">
+                {idea.data.title}
+              </a>
+            </td>
+            <td class="col-date">
+              <time datetime={idea.data.lastEdited.toISOString()}>
+                {idea.data.lastEdited.toISOString().split('T')[0]}
+              </time>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </section>
 </Layout>
+
+<style>
+  .terminal-header {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-top: 2rem;
+    margin-bottom: 4rem;
+    border-bottom: 2px solid var(--warm-ivory);
+    padding-bottom: 2rem;
+  }
+
+  .reader-nav a {
+    text-decoration: none;
+    color: var(--warm-ivory);
+    opacity: 0.5;
+    font-size: 0.9rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .reader-nav a:hover {
+    opacity: 1;
+  }
+
+  .dir-title {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 2.5rem;
+    color: var(--light-soft-gold);
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .dir-meta {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .dir-meta span {
+    color: var(--light-soft-gold);
+  }
+
+  .brutalist-container {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-bottom: 6rem;
+  }
+
+  .idea-ledger {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-primary);
+  }
+
+  .idea-ledger th {
+    text-align: left;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(237, 231, 218, 0.2);
+  }
+
+  .idea-ledger td {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid rgba(237, 231, 218, 0.1);
+    vertical-align: baseline;
+  }
+
+  .col-status {
+    width: 120px;
+  }
+
+  .status-badge {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  .status-badge.seed {
+    color: rgba(237, 231, 218, 0.5);
+  }
+
+  .status-badge.incubating {
+    color: var(--light-soft-gold);
+  }
+
+  .status-badge.mature {
+    color: var(--warm-ivory);
+    font-weight: 700;
+  }
+
+  .col-title {
+    padding-right: 2rem;
+  }
+
+  .artifact-link {
+    text-decoration: none;
+    color: var(--warm-ivory);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .artifact-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    color: var(--light-soft-gold);
+  }
+
+  .col-date {
+    width: 120px;
+    text-align: right;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 650px) {
+    .col-status {
+      display: none;
+    }
+
+    .idea-ledger th.col-status {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const ideas = await getCollection('ideas');
+  return ideas.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const base = import.meta.env.BASE_URL;
+const editedISO = entry.data.lastEdited.toISOString().split('T')[0];
+---
+
+<Layout title={`${entry.data.title} | Ideas Directory`} description={`Working note in ideas directory: ${entry.data.title}.`}>
+  <header class="terminal-header">
+    <nav class="reader-nav">
+      <a href={`${base}ideas/`}>← Back to /ideas</a>
+    </nav>
+    <h1 class="dir-title">/ideas/{entry.slug}</h1>
+    <p class="dir-meta">
+      State: <span>[{entry.data.status}]</span>
+      {' • '}
+      Last Modified: <time datetime={entry.data.lastEdited.toISOString()}>{editedISO}</time>
+    </p>
+  </header>
+
+  <article class="idea-doc">
+    <div class="idea-prose">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .idea-doc {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-bottom: 6rem;
+  }
+
+  .terminal-header {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--warm-ivory);
+    padding-bottom: 1.2rem;
+  }
+
+  .reader-nav a {
+    text-decoration: none;
+    color: var(--warm-ivory);
+    opacity: 0.5;
+    font-size: 0.9rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .reader-nav a:hover {
+    opacity: 1;
+  }
+
+  .dir-title {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: clamp(1.8rem, 3.8vw, 2.4rem);
+    color: var(--light-soft-gold);
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .dir-meta {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.86rem;
+    color: var(--soft-ivory);
+    line-height: 1.6;
+  }
+
+  .dir-meta span {
+    color: var(--light-soft-gold);
+  }
+
+  .idea-prose {
+    border-top: 1px solid rgba(237, 231, 218, 0.2);
+  }
+
+  .idea-prose :global(p),
+  .idea-prose :global(li) {
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 72ch;
+  }
+
+  .idea-prose :global(ul),
+  .idea-prose :global(ol) {
+    margin: 1rem 0;
+    padding-left: 1.2rem;
+  }
+
+  .idea-prose :global(a) {
+    color: var(--warm-ivory);
+    text-decoration: underline;
+    text-decoration-color: var(--light-soft-gold);
+    text-underline-offset: 3px;
+  }
+</style>
