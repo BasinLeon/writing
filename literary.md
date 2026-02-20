@@ -6,13 +6,21 @@ permalink: /literary/
 
 This is the personal side of my writing.
 
-Focus:
-- memory fragments
-- city and travel sketches
-- inner life essays
-- voice-driven experiments
+<section class="section-card">
+  <h2>Focus</h2>
+  <ul>
+    <li>Memory fragments</li>
+    <li>City and travel sketches</li>
+    <li>Inner life essays</li>
+    <li>Voice-driven experiments</li>
+  </ul>
+</section>
 
-Principles:
-- Start with one true scene.
-- Keep the language plain and vivid.
-- Let the emotion sit without over-explaining it.
+<section class="section-card">
+  <h2>Principles</h2>
+  <ul>
+    <li>Start with one true scene.</li>
+    <li>Keep the language plain and vivid.</li>
+    <li>Let the emotion sit without over-explaining it.</li>
+  </ul>
+</section>
