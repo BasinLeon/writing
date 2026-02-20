@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta property="og:description" content="{{ page.description | default: site.description }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta name="twitter:description" content="{{ page.description | default: site.description }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..800,0..100&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/css/premium.css' | relative_url }}">
+  </head>
+  <body>
+    <div class="page-noise" aria-hidden="true"></div>
+    <header class="site-header-premium">
+      <div class="shell">
+        <a class="brand" href="{{ '/' | relative_url }}">
+          <span class="brand-mark">LB</span>
+          <span class="brand-text">
+            <strong>Leon Basin</strong>
+            <small>Literary Digital Writer</small>
+          </span>
+        </a>
+        <nav class="site-nav-premium" aria-label="Primary navigation">
+          <a href="{{ '/manifesto/' | relative_url }}">Manifesto</a>
+          <a href="{{ '/literary/' | relative_url }}">Literary Lane</a>
+          <a href="{{ '/literary-ideas/' | relative_url }}">Literary Ideas</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <div class="shell">
+        {{ content }}
+      </div>
+    </main>
+
+    <footer class="site-footer-premium">
+      <div class="shell footer-grid">
+        <div>
+          <h3>{{ site.title }}</h3>
+          <p>Writing that survives rereading.</p>
+        </div>
+        <div>
+          <p>{{ site.description }}</p>
+          <p><a href="mailto:lbasin23@gmail.com">lbasin23@gmail.com</a></p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
