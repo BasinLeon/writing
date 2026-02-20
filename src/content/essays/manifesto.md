@@ -3,6 +3,9 @@ title: Manifesto
 description: A publishing standard for machine-era writing.
 date: 2026-02-20
 series: Foundational Text
+cycle: manifesto
+pretitle: Version 1 • Digital Era Journal
+readingMode: true
 tags:
   - manifesto
   - writing

@@ -3,6 +3,8 @@ title: Literary Lane
 description: Personal essays, memory fragments, and voice-led writing.
 date: 2026-02-20
 series: Literary Lane
+cycle: literary-lane
+readingMode: true
 tags:
   - personal
   - essays

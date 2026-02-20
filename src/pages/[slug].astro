@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import Layout from '../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -17,7 +17,7 @@ const next = currentIndex > -1 ? all[currentIndex + 1] : undefined;
 const prev = currentIndex > 0 ? all[currentIndex - 1] : undefined;
 ---
 
-<BaseLayout title={`${entry.data.title} | Leon Basin Literary`} description={entry.data.description ?? ''} readingMode={true}>
+<Layout title={`${entry.data.title} | Leon Basin Literary`} description={entry.data.description ?? ''} readingMode={entry.data.readingMode ?? true}>
   <article class="essay-layout">
     <header class="essay-head">
       <p class="kicker">{entry.data.series ?? 'Essay'}</p>
@@ -51,4 +51,4 @@ const prev = currentIndex > 0 ? all[currentIndex - 1] : undefined;
       </div>
     </footer>
   </article>
-</BaseLayout>
+</Layout>

@@ -3,6 +3,8 @@ title: Literary Ideas
 description: Starter ideas for essays and memory writing.
 date: 2026-02-20
 series: Notes
+cycle: notes
+readingMode: false
 tags:
   - ideas
   - prompts

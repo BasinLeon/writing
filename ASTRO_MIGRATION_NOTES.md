@@ -11,10 +11,12 @@ This repo now includes an Astro publishing path that preserves the live URL stru
 - Added Astro app scaffolding (`src`, `astro.config.mjs`, `package.json`, `tsconfig.json`)
 - Added content collection for essays (`src/content/essays`)
 - Added essay template with TOC + endmatter (`src/pages/[slug].astro`)
-- Switched GitHub Pages workflow to Astro build (`.github/workflows/pages.yml`)
+- Added LeonOS base layout (`src/layouts/Layout.astro`)
+- Added GitHub Pages deploy workflow (`.github/workflows/deploy.yml`)
+- Added structured essay schema in Content Collections (`src/content/config.ts`)
 
 ## Next production polish
 
-- Self-host fonts in `public/fonts/` and preload in base layout
+- Add real WOFF2 font files in `public/fonts/` and keep preload in base layout
 - Add tag/series index pages
 - Add RSS and sitemap generation
