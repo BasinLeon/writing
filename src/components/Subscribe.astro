@@ -1,0 +1,125 @@
+---
+const buttondownUsername = import.meta.env.PUBLIC_BUTTONDOWN_USERNAME ?? '';
+const buttondownAction = buttondownUsername
+  ? `https://buttondown.email/api/emails/embed-subscribe/${buttondownUsername}`
+  : '';
+const buttondownPopup = buttondownUsername ? `https://buttondown.email/${buttondownUsername}` : '';
+---
+
+{
+  buttondownUsername && (
+    <section class="colophon-subscribe">
+      <h3 class="subscribe-heading">The Archive, Delivered.</h3>
+      <p class="subscribe-manifesto">Occasional dispatches. No algorithms, just text.</p>
+
+      <form
+        action={buttondownAction}
+        method="post"
+        target="popupwindow"
+        onsubmit={`window.open('${buttondownPopup}', 'popupwindow')`}
+        class="embeddable-buttondown-form"
+      >
+        <div class="input-group">
+          <label for="bd-email" class="sr-only">Email address</label>
+          <input type="email" name="email" id="bd-email" placeholder="name@domain.com" required />
+          <input type="hidden" name="embed" value="1" />
+          <button type="submit">Subscribe -></button>
+        </div>
+      </form>
+    </section>
+  )
+}
+
+<style>
+  .colophon-subscribe {
+    max-width: 40ch;
+    margin-top: 1.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(237, 231, 218, 0.1);
+  }
+
+  .subscribe-heading {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    color: var(--light-soft-gold);
+    margin: 0 0 0.25rem;
+  }
+
+  .subscribe-manifesto {
+    margin: 0 0 1.1rem;
+    font-size: 0.85rem;
+    opacity: 0.68;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  input[type='email'] {
+    flex-grow: 1;
+    min-width: 220px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(237, 231, 218, 0.3);
+    color: var(--warm-ivory);
+    padding: 0.45rem 0;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border-radius: 0;
+    appearance: none;
+    transition: border-color 0.2s ease;
+  }
+
+  input[type='email']:focus {
+    outline: none;
+    border-bottom-color: var(--light-soft-gold);
+  }
+
+  input[type='email']::placeholder {
+    color: rgba(237, 231, 218, 0.24);
+    font-style: italic;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    color: var(--warm-ivory);
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  button:hover {
+    color: var(--light-soft-gold);
+    border-bottom-color: var(--light-soft-gold);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  @media (max-width: 620px) {
+    .input-group {
+      align-items: stretch;
+      gap: 0.45rem;
+    }
+
+    input[type='email'] {
+      min-width: 0;
+    }
+  }
+</style>
