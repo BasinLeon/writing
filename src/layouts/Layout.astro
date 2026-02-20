@@ -5,12 +5,16 @@ interface Props {
   title?: string;
   description?: string;
   readingMode?: boolean;
+  hideGlobalHeader?: boolean;
+  hideGlobalColophon?: boolean;
 }
 
 const {
   title = 'Leon Basin | Literary Digital Writer',
   description = 'High-signal literary writing for the digital era.',
-  readingMode = false
+  readingMode = false,
+  hideGlobalHeader = false,
+  hideGlobalColophon = false
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
@@ -36,27 +40,31 @@ const base = import.meta.env.BASE_URL;
     <link rel="preload" href={`${base}fonts/SpaceGrotesk-SemiBold.woff2`} as="font" type="font/woff2" crossorigin />
   </head>
   <body class={readingMode ? 'reading-mode' : ''}>
-    <header class="site-header">
-      <div class="shell nav-wrap">
-        <a href={base} class="brand">Leon Basin | Literary Digital Writer</a>
-        {!readingMode && (
-          <nav class="nav-links">
-            <a href={`${base}manifesto/`}>Manifesto</a>
-            <a href={`${base}literary/`}>Literary Lane</a>
-            <a href={`${base}ideas/`}>Literary Ideas</a>
-          </nav>
-        )}
-      </div>
-    </header>
+    {!hideGlobalHeader && (
+      <header class="site-header">
+        <div class="shell nav-wrap">
+          <a href={base} class="brand">Leon Basin | Literary Digital Writer</a>
+          {!readingMode && (
+            <nav class="nav-links">
+              <a href={`${base}manifesto/`}>Manifesto</a>
+              <a href={`${base}literary/`}>Literary Lane</a>
+              <a href={`${base}ideas/`}>Literary Ideas</a>
+            </nav>
+          )}
+        </div>
+      </header>
+    )}
     <main class="site-main">
       <div class="shell">
         <slot />
       </div>
     </main>
-    <footer class="site-colophon">
-      <div class="shell">
-        <p>Leon Basin Literary. A living archive for rereading.</p>
-      </div>
-    </footer>
+    {!hideGlobalColophon && (
+      <footer class="site-colophon">
+        <div class="shell">
+          <p>Leon Basin Literary. A living archive for rereading.</p>
+        </div>
+      </footer>
+    )}
   </body>
 </html>

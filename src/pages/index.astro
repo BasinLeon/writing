@@ -1,59 +1,214 @@
 ---
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const publishedLiterary = await getCollection('literary', ({ data }) => data.isDraft !== true);
-const sortedWorks = publishedLiterary.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+const allWriting = await getCollection('literary', ({ data }) => data.isDraft !== true);
+const sortedWriting = allWriting.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const marqueePost = sortedWriting[0];
+const ledgerPosts = sortedWriting.slice(1);
 const base = import.meta.env.BASE_URL;
-const marquee = sortedWorks[0];
-
-const estimateReadMinutes = (text: string) => {
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 220));
-};
-
-const excerpt = (text: string, count = 44) => {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.slice(0, count).join(' ') + (words.length > count ? '...' : '');
-};
 ---
 
-<Layout title="Leon Basin Literary" description="Literary digital writing for the modern era.">
-  <section class="marquee">
-    <p class="kicker">Lead Signal</p>
-    {marquee && (
-      <>
-        <h1><a href={`${base}literary/${marquee.slug}/`} class="headline-link">{marquee.data.title}</a></h1>
-        <p class="marquee-meta">
-          {marquee.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-          {' • '}
-          {estimateReadMinutes(marquee.body)} min read
-          {' • '}
-          {marquee.data.type}
-        </p>
-        <p class="prose lede">{excerpt(marquee.body)}</p>
-        <p class="editorial-links">
-          <a href={`${base}literary/${marquee.slug}/`}>Read full essay →</a>
-          <a href={`${base}manifesto/`}>Manifesto</a>
-          <a href={`${base}literary/`}>Literary Lane</a>
-          <a href={`${base}ideas/`}>Ideas</a>
-        </p>
-      </>
+<Layout title="Leon Basin Literary" hideGlobalHeader={true}>
+  <header class="anchor">
+    <a href={base} class="site-title">Leon Basin</a>
+    <nav class="quiet-nav">
+      <a href={`${base}manifesto/`}>Manifesto</a>
+      <a href={`${base}literary/`}>Literary Lane</a>
+      <a href={`${base}ideas/`}>Ideas</a>
+    </nav>
+  </header>
+
+  <main>
+    {marqueePost && (
+      <section class="marquee">
+        <div class="signature-rule"></div>
+        <article class="lead-signal">
+          <p class="meta">
+            <time datetime={marqueePost.data.publishDate.toISOString()}>
+              {marqueePost.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </time>
+            <span class="separator"> • </span>
+            <span class="type">{marqueePost.data.type}</span>
+          </p>
+          <h1 class="display-title">
+            <a href={`${base}literary/${marqueePost.slug}/`}>{marqueePost.data.title}</a>
+          </h1>
+          <p class="summary">{marqueePost.data.description}</p>
+          <a href={`${base}literary/${marqueePost.slug}/`} class="editorial-link">Read full text →</a>
+        </article>
+      </section>
     )}
-  </section>
 
-  <hr class="section-rule" />
-
-  <section class="ledger">
-    <h2>Archive</h2>
-    <ol class="ledger-list">
-      {sortedWorks.slice(0, 6).map((entry) => (
-        <li class="ledger-row">
-          <span class="ledger-date">{entry.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-          <span class="ledger-title"><a href={`${base}literary/${entry.slug}/`}>{entry.data.title}</a></span>
-          <span class="ledger-meta">{estimateReadMinutes(entry.body)} min read / {entry.data.type}</span>
-        </li>
-      ))}
-    </ol>
-  </section>
+    <section class="ledger">
+      <h2 class="ledger-title">Archive</h2>
+      <ul class="archive-list">
+        {ledgerPosts.map((post) => (
+          <li>
+            <time datetime={post.data.publishDate.toISOString()} class="ledger-date">
+              {post.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </time>
+            <a href={`${base}literary/${post.slug}/`} class="ledger-link">{post.data.title}</a>
+            <span class="ledger-meta">{post.data.type}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
 </Layout>
+
+<style>
+  .anchor {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 2rem;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(237, 231, 218, 0.1);
+  }
+
+  .site-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--warm-ivory);
+  }
+
+  .quiet-nav a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: var(--warm-ivory);
+    opacity: 0.6;
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .quiet-nav a:hover {
+    opacity: 1;
+  }
+
+  .marquee {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 6rem;
+  }
+
+  .signature-rule {
+    width: 2px;
+    background-color: var(--light-soft-gold);
+    flex-shrink: 0;
+  }
+
+  .lead-signal .meta {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    margin-bottom: 1rem;
+  }
+
+  .lead-signal .display-title {
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .lead-signal .display-title a {
+    text-decoration: none;
+    color: var(--light-soft-gold);
+  }
+
+  .lead-signal .summary {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    max-width: 65ch;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+
+  .editorial-link {
+    text-decoration: none;
+    border-bottom: 1px solid var(--light-soft-gold);
+    color: var(--warm-ivory);
+    padding-bottom: 2px;
+    font-style: italic;
+  }
+
+  .ledger-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.4;
+    margin-bottom: 2rem;
+  }
+
+  .archive-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .archive-list li {
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid rgba(237, 231, 218, 0.05);
+  }
+
+  .ledger-date,
+  .ledger-meta {
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+
+  .ledger-meta {
+    text-align: right;
+  }
+
+  .ledger-link {
+    text-decoration: none;
+    color: var(--warm-ivory);
+    font-size: 1.05rem;
+    font-weight: 500;
+  }
+
+  .ledger-link:hover {
+    color: var(--light-soft-gold);
+  }
+
+  @media (max-width: 700px) {
+    .anchor {
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 2.4rem;
+      padding-bottom: 1.2rem;
+    }
+
+    .quiet-nav a {
+      margin-left: 0;
+      margin-right: 1rem;
+    }
+
+    .marquee {
+      margin-bottom: 2.8rem;
+    }
+
+    .lead-signal .display-title {
+      font-size: 2rem;
+    }
+
+    .archive-list li {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+      padding-block: 0.9rem;
+    }
+
+    .ledger-meta {
+      text-align: left;
+    }
+  }
+</style>
