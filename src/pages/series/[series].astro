@@ -2,11 +2,10 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
-const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-
 export async function getStaticPaths() {
   const allWriting = await getCollection('literary', ({ data }) => data.isDraft !== true);
   const allSeries = [...new Set(allWriting.map((post) => post.data.series?.trim()).filter(Boolean))] as string[];
+  const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
   return allSeries.map((seriesName) => {
     const posts = allWriting
@@ -14,7 +13,7 @@ export async function getStaticPaths() {
       .sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf());
 
     return {
-      params: { series: toSlug(seriesName) },
+      params: { series: slugify(seriesName) },
       props: { seriesName, posts }
     };
   });
