@@ -1,0 +1,20 @@
+title: "Leon Basin Literary"
+description: "Personal essays, memory fragments, and voice-led writing."
+theme: minima
+markdown: kramdown
+timezone: America/Los_Angeles
+lang: en-US
+
+# Project Pages URL for repo: BasinLeon/writing
+url: "https://basinleon.github.io"
+baseurl: "/writing"
+
+author:
+  name: Leon Basin
+  email: lbasin23@gmail.com
+
+header_pages:
+  - literary.md
+  - literary-ideas.md
+
+show_excerpts: true
