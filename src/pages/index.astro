@@ -5,38 +5,53 @@ import { getCollection } from 'astro:content';
 const publishedLiterary = await getCollection('literary', ({ data }) => data.isDraft !== true);
 const sortedWorks = publishedLiterary.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 const base = import.meta.env.BASE_URL;
+const marquee = sortedWorks[0];
 
 const estimateReadMinutes = (text: string) => {
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 220));
 };
+
+const excerpt = (text: string, count = 44) => {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  return words.slice(0, count).join(' ') + (words.length > count ? '...' : '');
+};
 ---
 
 <Layout title="Leon Basin Literary" description="Literary digital writing for the modern era.">
-  <section class="hero">
-    <p class="kicker">Literary Digital Writer</p>
-    <h1>Writing for the Digital Era, Without Losing the Human Pulse</h1>
-    <p class="prose lede">Personal essays, memory fragments, and voice-led writing. This is a living archive for interior life, modern attention, and language that refuses to flatten into content.</p>
-    <p class="editorial-links">
-      <a href={`${base}manifesto/`}>Read the manifesto</a>
-      <a href={`${base}literary/`}>Enter literary lane</a>
-      <a href={`${base}ideas/`}>Browse literary ideas</a>
-    </p>
+  <section class="marquee">
+    <p class="kicker">Lead Signal</p>
+    {marquee && (
+      <>
+        <h1><a href={`${base}literary/${marquee.slug}/`} class="headline-link">{marquee.data.title}</a></h1>
+        <p class="marquee-meta">
+          {marquee.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          {' • '}
+          {estimateReadMinutes(marquee.body)} min read
+          {' • '}
+          {marquee.data.type}
+        </p>
+        <p class="prose lede">{excerpt(marquee.body)}</p>
+        <p class="editorial-links">
+          <a href={`${base}literary/${marquee.slug}/`}>Read full essay →</a>
+          <a href={`${base}manifesto/`}>Manifesto</a>
+          <a href={`${base}literary/`}>Literary Lane</a>
+          <a href={`${base}ideas/`}>Ideas</a>
+        </p>
+      </>
+    )}
   </section>
 
-  <section class="latest">
-    <h2>Latest Writing</h2>
-    <ol class="writing-list">
+  <hr class="section-rule" />
+
+  <section class="ledger">
+    <h2>Archive</h2>
+    <ol class="ledger-list">
       {sortedWorks.slice(0, 6).map((entry) => (
-        <li>
-          <a href={`${base}literary/${entry.slug}/`} class="writing-title">{entry.data.title}</a>
-          <p class="writing-meta">
-            {entry.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-            {' • '}
-            {entry.data.type}
-            {' • '}
-            {estimateReadMinutes(entry.body)} min read
-          </p>
+        <li class="ledger-row">
+          <span class="ledger-date">{entry.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+          <span class="ledger-title"><a href={`${base}literary/${entry.slug}/`}>{entry.data.title}</a></span>
+          <span class="ledger-meta">{estimateReadMinutes(entry.body)} min read / {entry.data.type}</span>
         </li>
       ))}
     </ol>
