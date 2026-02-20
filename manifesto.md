@@ -5,6 +5,7 @@ permalink: /manifesto/
 series: Foundational Text
 pretitle: Version 1 • Digital Era Journal
 date: 2026-02-20
+reading_mode: true
 ---
 
 I write as a literary digital writer of the digital era.

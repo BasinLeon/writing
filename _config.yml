@@ -3,6 +3,7 @@ description: "Literary digital writing for the modern era: essays, memory fragme
 markdown: kramdown
 timezone: America/Los_Angeles
 lang: en-US
+permalink: /essays/:title/
 
 # Project Pages URL for repo: BasinLeon/writing
 url: "https://basinleon.github.io"

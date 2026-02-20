@@ -132,6 +132,20 @@ body {
   padding: 3.2rem 0 4.8rem;
 }
 
+.reading-mode .site-main {
+  padding-top: 2.2rem;
+}
+
+.site-header-reading {
+  background: rgba(249, 246, 239, 0.94);
+}
+
+.reading-mode .brand-mark {
+  width: 36px;
+  height: 36px;
+  font-size: 0.88rem;
+}
+
 .hero {
   position: relative;
   border: 1px solid rgba(111, 45, 29, 0.24);
@@ -140,7 +154,6 @@ body {
   background: linear-gradient(165deg, rgba(255, 253, 248, 0.96), rgba(248, 239, 226, 0.94));
   box-shadow: var(--shadow);
   overflow: hidden;
-  animation: reveal 520ms ease both;
 }
 
 .hero-grid {
@@ -280,7 +293,6 @@ a {
 .section-card {
   margin-top: 1.2rem;
   padding: 1.2rem 1.15rem;
-  animation: reveal 620ms ease both;
 }
 
 .promise-band {
@@ -389,13 +401,22 @@ a {
 .essay-content li {
   max-width: 72ch;
   font-size: 1.08rem;
-  line-height: 1.72;
+  line-height: 1.74;
+  font-family: "Fraunces", Georgia, serif;
+  font-variation-settings: "SOFT" 20;
 }
 
 .essay-content h2,
 .essay-content h3 {
   max-width: 25ch;
   margin-top: 1.5rem;
+}
+
+.essay-content a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(22, 18, 15, 0.42);
+  text-underline-offset: 0.14em;
 }
 
 .essay-endmatter {
@@ -446,17 +467,6 @@ ul {
 
 .footer-grid h3 {
   margin: 0 0 0.3rem;
-}
-
-@keyframes reveal {
-  from {
-    transform: translateY(8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 @media (max-width: 860px) {

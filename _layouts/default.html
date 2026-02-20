@@ -19,9 +19,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..800,0..100&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/premium.css' | relative_url }}">
   </head>
-  <body>
+  <body class="{% if page.reading_mode %}reading-mode{% endif %}">
     <div class="page-noise" aria-hidden="true"></div>
-    <header class="site-header-premium">
+    <header class="site-header-premium{% if page.reading_mode %} site-header-reading{% endif %}">
       <div class="shell">
         <a class="brand" href="{{ '/' | relative_url }}">
           <span class="brand-mark">LB</span>
@@ -30,11 +30,13 @@
             <small>Literary Digital Writer</small>
           </span>
         </a>
-        <nav class="site-nav-premium" aria-label="Primary navigation">
-          <a href="{{ '/manifesto/' | relative_url }}">Manifesto</a>
-          <a href="{{ '/literary/' | relative_url }}">Literary Lane</a>
-          <a href="{{ '/literary-ideas/' | relative_url }}">Literary Ideas</a>
-        </nav>
+        {% unless page.reading_mode %}
+          <nav class="site-nav-premium" aria-label="Primary navigation">
+            <a href="{{ '/manifesto/' | relative_url }}">Manifesto</a>
+            <a href="{{ '/literary/' | relative_url }}">Literary Lane</a>
+            <a href="{{ '/literary-ideas/' | relative_url }}">Literary Ideas</a>
+          </nav>
+        {% endunless %}
       </div>
     </header>
 
@@ -44,17 +46,19 @@
       </div>
     </main>
 
-    <footer class="site-footer-premium">
-      <div class="shell footer-grid">
-        <div>
-          <h3>{{ site.title }}</h3>
-          <p>Writing that survives rereading.</p>
+    {% unless page.reading_mode %}
+      <footer class="site-footer-premium">
+        <div class="shell footer-grid">
+          <div>
+            <h3>{{ site.title }}</h3>
+            <p>Writing that survives rereading.</p>
+          </div>
+          <div>
+            <p>{{ site.description }}</p>
+            <p><a href="mailto:lbasin23@gmail.com">lbasin23@gmail.com</a></p>
+          </div>
         </div>
-        <div>
-          <p>{{ site.description }}</p>
-          <p><a href="mailto:lbasin23@gmail.com">lbasin23@gmail.com</a></p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    {% endunless %}
   </body>
 </html>
