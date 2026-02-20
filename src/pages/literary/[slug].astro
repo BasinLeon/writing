@@ -12,6 +12,7 @@ const { Content } = await render(entry);
 const base = import.meta.env.BASE_URL;
 const words = entry.body.trim().split(/\s+/).filter(Boolean).length;
 const readMinutes = Math.max(1, Math.round(words / 220));
+const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 ---
 
 <Layout
@@ -36,6 +37,12 @@ const readMinutes = Math.max(1, Math.round(words / 220));
         <span>{entry.data.type}</span>
         {' • '}
         <span>{readMinutes} min read</span>
+      </div>
+      <div class="taxonomy-line">
+        {entry.data.series && <a href={`${base}series/${toSlug(entry.data.series)}/`}>Series: {entry.data.series}</a>}
+        {(entry.data.tags ?? []).map((tag) => (
+          <a href={`${base}tags/${toSlug(tag)}/`}>#{tag}</a>
+        ))}
       </div>
     </header>
 
@@ -98,6 +105,27 @@ const readMinutes = Math.max(1, Math.round(words / 220));
     text-transform: uppercase;
     letter-spacing: 0.05em;
     opacity: 0.6;
+  }
+
+  .taxonomy-line {
+    margin-top: 0.8rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    font-size: 0.8em;
+  }
+
+  .taxonomy-line a {
+    color: var(--warm-ivory);
+    opacity: 0.75;
+    text-decoration: underline;
+    text-decoration-color: rgba(224, 185, 115, 0.55);
+    text-underline-offset: 0.16em;
+  }
+
+  .taxonomy-line a:hover {
+    opacity: 1;
   }
 
   .prose-content p {

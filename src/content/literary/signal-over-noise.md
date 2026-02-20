@@ -4,6 +4,8 @@ publishDate: 2026-02-18
 isDraft: false
 type: fragment
 description: "A short note on choosing precision over velocity in digital writing."
+series: Fragments
+tags: [attention, craft, digital-era]
 ---
 
 I used to think speed proved clarity.

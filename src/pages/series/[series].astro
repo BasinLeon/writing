@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+export async function getStaticPaths() {
+  const literary = await getCollection('literary', ({ data }) => !data.isDraft);
+  const groups = new Map<string, typeof literary>();
+
+  for (const entry of literary) {
+    const series = entry.data.series?.trim() || 'Unsorted';
+    const existing = groups.get(series) ?? [];
+    existing.push(entry);
+    groups.set(series, existing);
+  }
+
+  return Array.from(groups.entries()).map(([seriesName, entries]) => ({
+    params: { series: toSlug(seriesName) },
+    props: {
+      seriesName,
+      entries: entries.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+    }
+  }));
+}
+
+const { seriesName, entries } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const estimateReadMinutes = (text: string) => {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+};
+---
+
+<Layout title={`${seriesName} | Series`} description={`Archive entries in ${seriesName}.`}>
+  <section class="latest">
+    <p class="kicker">Series</p>
+    <h1>{seriesName}</h1>
+    <ol class="writing-list">
+      {entries.map((entry) => (
+        <li>
+          <a class="writing-title" href={`${base}literary/${entry.slug}/`}>{entry.data.title}</a>
+          <p class="writing-meta">
+            {entry.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            {' • '}
+            {estimateReadMinutes(entry.body)} min
+          </p>
+        </li>
+      ))}
+    </ol>
+    <p class="editorial-links" style="margin-top: 1rem;"><a href={`${base}series/`}>Back to series →</a></p>
+  </section>
+</Layout>

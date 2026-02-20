@@ -43,14 +43,15 @@ const base = import.meta.env.BASE_URL;
     )}
 
     <section class="ledger">
-      <h2 class="ledger-title">Archive</h2>
-      <ul class="archive-list">
+      <h2 class="archive-heading">Archive</h2>
+      <p class="catalog-links"><a href={`${base}series/`}>Series</a> <a href={`${base}tags/`}>Tags</a></p>
+      <ul class="ledger-list">
         {ledgerPosts.map((post) => (
-          <li>
+          <li class="ledger-row">
             <time datetime={post.data.publishDate.toISOString()} class="ledger-date">
               {post.data.publishDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
             </time>
-            <a href={`${base}literary/${post.slug}/`} class="ledger-link">{post.data.title}</a>
+            <p class="ledger-title"><a href={`${base}literary/${post.slug}/`}>{post.data.title}</a></p>
             <span class="ledger-meta">{post.data.type}</span>
           </li>
         ))}
@@ -136,7 +137,7 @@ const base = import.meta.env.BASE_URL;
     font-style: italic;
   }
 
-  .ledger-title {
+  .archive-heading {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -144,40 +145,23 @@ const base = import.meta.env.BASE_URL;
     margin-bottom: 2rem;
   }
 
-  .archive-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .catalog-links {
+    margin: -1rem 0 1.2rem;
   }
 
-  .archive-list li {
-    display: grid;
-    grid-template-columns: 100px 1fr 100px;
-    gap: 1rem;
-    align-items: baseline;
-    padding-block: 1.25rem;
-    border-bottom: 1px solid rgba(237, 231, 218, 0.05);
-  }
-
-  .ledger-date,
-  .ledger-meta {
-    font-size: 0.85rem;
-    opacity: 0.5;
-  }
-
-  .ledger-meta {
-    text-align: right;
-  }
-
-  .ledger-link {
+  .catalog-links a {
+    margin-right: 0.9rem;
     text-decoration: none;
     color: var(--warm-ivory);
-    font-size: 1.05rem;
-    font-weight: 500;
+    opacity: 0.72;
+    font-size: 0.88rem;
   }
 
-  .ledger-link:hover {
-    color: var(--light-soft-gold);
+  .catalog-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: var(--light-soft-gold);
   }
 
   @media (max-width: 700px) {
@@ -201,14 +185,8 @@ const base = import.meta.env.BASE_URL;
       font-size: 2rem;
     }
 
-    .archive-list li {
-      grid-template-columns: 1fr;
-      gap: 0.3rem;
-      padding-block: 0.9rem;
-    }
-
-    .ledger-meta {
-      text-align: left;
+    .ledger {
+      margin-top: 0.6rem;
     }
   }
 </style>

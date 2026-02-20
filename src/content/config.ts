@@ -7,7 +7,9 @@ const literaryCollection = defineCollection({
     publishDate: z.date(),
     description: z.string().max(160, 'Description must be under 160 characters.'),
     type: z.enum(['essay', 'fragment', 'memory']),
-    isDraft: z.boolean().default(true)
+    isDraft: z.boolean().default(true),
+    series: z.string().optional(),
+    tags: z.array(z.string()).default([])
   }).strict()
 });
 
