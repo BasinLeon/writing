@@ -14,12 +14,15 @@ const words = entry.body.trim().split(/\s+/).filter(Boolean).length;
 const readMinutes = Math.max(1, Math.round(words / 220));
 const toSlug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const seriesName = entry.data.series?.trim() ?? '';
-const allPublished = await getCollection('literary', ({ data }) => data.isDraft !== true);
-const seriesEntries = seriesName
-  ? allPublished
-      .filter((post) => (post.data.series?.trim() ?? '') === seriesName)
-      .sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf())
-  : [];
+const isSeries = !!seriesName;
+let seriesPosts: typeof entry[] = [];
+
+if (isSeries) {
+  const allPublished = await getCollection('literary', ({ data }) => data.isDraft !== true);
+  seriesPosts = allPublished
+    .filter((post) => (post.data.series?.trim() ?? '') === seriesName)
+    .sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf());
+}
 ---
 
 <Layout
@@ -51,22 +54,23 @@ const seriesEntries = seriesName
           <a href={`${base}tags/${toSlug(tag)}/`}>#{tag}</a>
         ))}
       </div>
-      {seriesEntries.length > 1 && (
-        <nav class="series-local-toc" aria-label={`${seriesName} table of contents`}>
-          <p class="series-local-title">{seriesName}</p>
-          <ol>
-            {seriesEntries.map((post, index) => (
+      {isSeries && seriesPosts.length > 1 && (
+        <aside class="series-toc" aria-label={`${seriesName} table of contents`}>
+          <p class="toc-label">Volume Index - <strong>{seriesName}</strong></p>
+          <ol class="toc-list">
+            {seriesPosts.map((post, index) => (
               <li>
-                <span class="series-part">Part {index + 1}</span>
                 {post.slug === entry.slug ? (
-                  <span class="series-current">{post.data.title}</span>
+                  <span class="toc-current">Part {index + 1}. {post.data.title}</span>
                 ) : (
-                  <a href={`${base}literary/${post.slug}/`}>{post.data.title}</a>
+                  <a href={`${base}literary/${post.slug}/`} class="toc-link">
+                    Part {index + 1}. {post.data.title}
+                  </a>
                 )}
               </li>
             ))}
           </ol>
-        </nav>
+        </aside>
       )}
     </header>
 
@@ -147,59 +151,68 @@ const seriesEntries = seriesName
     opacity: 1;
   }
 
-  .series-local-toc {
-    margin: 1.5rem auto 0;
-    max-width: 44ch;
-    border-top: 1px solid rgba(224, 185, 115, 0.28);
-    padding-top: 1rem;
+  .series-toc {
+    max-width: 65ch;
+    margin-inline: auto;
+    margin-bottom: 4rem;
+    padding: 1.5rem 2rem;
+    background-color: rgba(237, 231, 218, 0.02);
+    border-left: 2px solid var(--light-soft-gold);
+    font-family: var(--font-primary);
     text-align: left;
   }
 
-  .series-local-title {
-    margin: 0 0 0.6rem;
-    font-size: 0.78em;
+  .toc-label {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--light-soft-gold);
+    letter-spacing: 0.05em;
+    opacity: 0.5;
   }
 
-  .series-local-toc ol {
+  .toc-label strong {
+    color: var(--light-soft-gold);
+    font-family: var(--font-display);
+    letter-spacing: normal;
+    text-transform: none;
+    font-size: 1.1rem;
+    margin-left: 0.5rem;
+  }
+
+  .toc-list {
     margin: 0;
     padding: 0;
     list-style: none;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.35rem;
   }
 
-  .series-local-toc li {
-    display: grid;
-    grid-template-columns: 66px 1fr;
-    gap: 0.5rem;
-    align-items: baseline;
-    font-size: 0.76em;
-  }
-
-  .series-part {
-    opacity: 0.52;
-    font-family: var(--font-display);
-  }
-
-  .series-local-toc a {
+  .toc-link {
     color: var(--warm-ivory);
-    text-decoration: underline;
-    text-decoration-color: rgba(224, 185, 115, 0.45);
-    text-underline-offset: 0.14em;
-    opacity: 0.82;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, color 0.2s ease;
   }
 
-  .series-local-toc a:hover {
+  .toc-link:hover {
     opacity: 1;
     color: var(--light-soft-gold);
   }
 
-  .series-current {
+  .toc-current {
+    color: var(--warm-ivory);
+    font-style: italic;
+    opacity: 1;
+    position: relative;
+    padding-left: 1.2rem;
+  }
+
+  .toc-current::before {
+    content: "->";
+    position: absolute;
+    left: 0;
     color: var(--light-soft-gold);
-    opacity: 0.94;
   }
 
   .prose-content {
@@ -277,9 +290,8 @@ const seriesEntries = seriesName
       margin-bottom: 2.5rem;
     }
 
-    .series-local-toc li {
-      grid-template-columns: 1fr;
-      gap: 0.1rem;
+    .series-toc {
+      padding: 1rem 1.2rem;
     }
   }
 </style>
