@@ -119,12 +119,62 @@ body {
   border-top: 1px solid rgba(224, 185, 115, 0.14);
   padding: 0.9rem 0 1.4rem;
 }
+.colophon-grid {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 .site-colophon p {
   margin: 0;
   color: #988f81;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+.subscribe-form {
+  display: grid;
+  gap: 0.4rem;
+  min-width: min(420px, 100%);
+}
+.subscribe-form label {
+  color: #988f81;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.subscribe-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.subscribe-form input[type="email"] {
+  flex: 1;
+  min-width: 220px;
+  border: 1px solid rgba(224, 185, 115, 0.28);
+  background: rgba(17, 20, 27, 0.85);
+  color: var(--warm-ivory);
+  padding: 0.55rem 0.7rem;
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+}
+.subscribe-form input[type="email"]::placeholder {
+  color: #8f8677;
+}
+.subscribe-form button {
+  border: 1px solid rgba(224, 185, 115, 0.45);
+  background: transparent;
+  color: var(--warm-ivory);
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.subscribe-form button:hover {
+  border-color: var(--light-soft-gold);
+  color: var(--light-soft-gold);
 }
 .hero,
 .card,
@@ -420,5 +470,15 @@ a.writing-title:hover {
   .editorial-links {
     flex-direction: column;
     gap: 0.35rem;
+  }
+  .subscribe-form {
+    width: 100%;
+    min-width: 0;
+  }
+  .subscribe-row {
+    flex-direction: column;
+  }
+  .subscribe-form input[type="email"] {
+    min-width: 0;
   }
 }
